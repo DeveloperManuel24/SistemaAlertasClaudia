@@ -46,7 +46,6 @@ namespace SistemaAlertasBackEnd
         //public DbSet<GeneroPelicula> GeneroPeliculas { get; set; }
         //public DbSet<ActorPelicula> ActorPeliculas { get; set; }
         //public DbSet<Error> Errores { get; set; }
-        public DbSet<Token> Tokens { get; set; }
 
     }
 

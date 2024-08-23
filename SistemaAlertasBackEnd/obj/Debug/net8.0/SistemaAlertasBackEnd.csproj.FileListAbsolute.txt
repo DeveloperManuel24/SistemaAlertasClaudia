@@ -178,3 +178,4 @@ C:\Users\mordo\source\repos\SistemaAlertasBackEnd\SistemaAlertasBackEnd\obj\Debu
 C:\Users\mordo\source\repos\SistemaAlertasBackEnd\SistemaAlertasBackEnd\obj\Debug\net8.0\SistemaAlertasBackEnd.pdb
 C:\Users\mordo\source\repos\SistemaAlertasBackEnd\SistemaAlertasBackEnd\obj\Debug\net8.0\SistemaAlertasBackEnd.genruntimeconfig.cache
 C:\Users\mordo\source\repos\SistemaAlertasBackEnd\SistemaAlertasBackEnd\obj\Debug\net8.0\ref\SistemaAlertasBackEnd.dll
+C:\Users\mordo\source\repos\SistemaAlertasBackEnd\SistemaAlertasBackEnd\obj\Debug\net8.0\SistemaAlertasBackEnd.sourcelink.json

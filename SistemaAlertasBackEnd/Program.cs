@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using SistemaAlertasBackEnd;
 using SistemaAlertasBackEnd.EndPoints;
+using SistemaAlertasBackEnd.Repositorios;
 using SistemaAlertasBackEnd.Servicios;
 using SistemaAlertasBackEnd.Utilidades;
 
@@ -72,6 +73,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<IServicioUsuarios, ServicioUsuarios>();
 builder.Services.AddTransient<ServicioEmail>();
 
+builder.Services.AddScoped<IRepositorioSensor, RepositorioSensor>();
+
 // Otros servicios
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddAutoMapper(typeof(Program)); // Configuración AutoMapper
@@ -99,5 +102,6 @@ app.UseAuthorization(); // Autorización después de autenticación
 
 // Configuración de los EndPoints
 app.MapGroup("/usuarios").MapUsuarios();
+app.MapGroup("/api").MapSensores();
 
 app.Run();

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SistemaAlertasBackEnd;
 
@@ -11,9 +12,11 @@ using SistemaAlertasBackEnd;
 namespace SistemaAlertasBackEnd.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240827024355_LecturaEntitudadNuevo")]
+    partial class LecturaEntitudadNuevo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,47 +24,6 @@ namespace SistemaAlertasBackEnd.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("LecturaEntidad", b =>
-                {
-                    b.Property<int>("ReadId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ReadId"));
-
-                    b.Property<DateTime>("RegisterDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("SensorEntidadSensorId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SensorId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Unity")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<decimal?>("orp_parameter")
-                        .HasPrecision(5, 2)
-                        .HasColumnType("decimal(5,2)");
-
-                    b.Property<decimal?>("ph_parameter")
-                        .HasPrecision(5, 2)
-                        .HasColumnType("decimal(5,2)");
-
-                    b.Property<decimal?>("turbidez_parameter")
-                        .HasPrecision(5, 2)
-                        .HasColumnType("decimal(5,2)");
-
-                    b.HasKey("ReadId");
-
-                    b.HasIndex("SensorEntidadSensorId");
-
-                    b.ToTable("LecturaEntitys");
-                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -300,6 +262,47 @@ namespace SistemaAlertasBackEnd.Migrations
                     b.ToTable("AlertaEntitys");
                 });
 
+            modelBuilder.Entity("SistemaAlertasBackEnd.Entidades.LecturaEntidad", b =>
+                {
+                    b.Property<int>("ReadId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ReadId"));
+
+                    b.Property<DateTime>("RegisterDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("SensorEntidadSensorId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SensorId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Unity")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<decimal?>("orp_parameter")
+                        .HasPrecision(5, 2)
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<decimal?>("ph_parameter")
+                        .HasPrecision(5, 2)
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<decimal?>("turbidez_parameter")
+                        .HasPrecision(5, 2)
+                        .HasColumnType("decimal(5,2)");
+
+                    b.HasKey("ReadId");
+
+                    b.HasIndex("SensorEntidadSensorId");
+
+                    b.ToTable("LecturaEntitys");
+                });
+
             modelBuilder.Entity("SistemaAlertasBackEnd.Entidades.SensorEntidad", b =>
                 {
                     b.Property<int>("SensorId")
@@ -321,15 +324,6 @@ namespace SistemaAlertasBackEnd.Migrations
                     b.HasKey("SensorId");
 
                     b.ToTable("SensorEntitys");
-                });
-
-            modelBuilder.Entity("LecturaEntidad", b =>
-                {
-                    b.HasOne("SistemaAlertasBackEnd.Entidades.SensorEntidad", "SensorEntidad")
-                        .WithMany("LecturaEntidades")
-                        .HasForeignKey("SensorEntidadSensorId");
-
-                    b.Navigation("SensorEntidad");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -387,6 +381,13 @@ namespace SistemaAlertasBackEnd.Migrations
                 {
                     b.HasOne("SistemaAlertasBackEnd.Entidades.SensorEntidad", null)
                         .WithMany("AlertaEntidades")
+                        .HasForeignKey("SensorEntidadSensorId");
+                });
+
+            modelBuilder.Entity("SistemaAlertasBackEnd.Entidades.LecturaEntidad", b =>
+                {
+                    b.HasOne("SistemaAlertasBackEnd.Entidades.SensorEntidad", null)
+                        .WithMany("LecturaEntidades")
                         .HasForeignKey("SensorEntidadSensorId");
                 });
 

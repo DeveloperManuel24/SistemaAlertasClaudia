@@ -1,31 +1,65 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using SistemaAlertasBackEnd.Entidades;
 
 namespace SistemaAlertasBackEnd
 {
-    public class ApplicationDbContext : IdentityDbContext//Aqui agregas automaticamente las tablas y todo lo necesario para los usuarios
+    public class ApplicationDbContext : IdentityDbContext //Aquí agregas automáticamente las tablas y todo lo necesario para los usuarios
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
         }
-
 
         //ApiFluente:
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            //modelBuilder.Entity<Genero>().Property(p => p.Nombre).HasMaxLength(50);
-            //modelBuilder.Entity<Actor>().Property(p => p.Nombre).HasMaxLength(150);
-            //modelBuilder.Entity<Actor>().Property(p => p.Foto).IsUnicode(false);
-            //modelBuilder.Entity<Pelicula>().Property(p => p.Titulo).HasMaxLength(150);
-            //modelBuilder.Entity<Pelicula>().Property(p => p.Poster).IsUnicode(false);
-            //modelBuilder.Entity<GeneroPelicula>().HasKey(g => new { g.GeneroId, g.PeliculaId });
-            //modelBuilder.Entity<ActorPelicula>().HasKey(a => new { a.PeliculaId, a.ActorId });
+            // SensorEntidad
+            modelBuilder.Entity<SensorEntidad>().HasKey(x => x.SensorId);
+            modelBuilder.Entity<SensorEntidad>().Property(x => x.Location)
+                .IsRequired()
+                .HasMaxLength(250);
+            modelBuilder.Entity<SensorEntidad>().Property(x => x.Status)
+                .IsRequired()
+                .HasMaxLength(150);
 
+            // LecturaEntidad
+            modelBuilder.Entity<LecturaEntidad>().HasKey(x => x.ReadId);
+            modelBuilder.Entity<LecturaEntidad>().Property(x => x.RegisterDate)
+                .IsRequired();
+            modelBuilder.Entity<LecturaEntidad>().Property(x => x.Unity)
+                .IsRequired()
+                .HasMaxLength(100);
+            modelBuilder.Entity<LecturaEntidad>().Property(x => x.ph_parameter)
+                .HasPrecision(5, 2);
+            modelBuilder.Entity<LecturaEntidad>().Property(x => x.orp_parameter)
+                .HasPrecision(5, 2);
+            modelBuilder.Entity<LecturaEntidad>().Property(x => x.turbidez_parameter)
+                .HasPrecision(5, 2);
 
-            //Personalización para las tablas de los usuarios:
+            // Configuración explícita de la relación uno a muchos
+            modelBuilder.Entity<LecturaEntidad>()
+                .HasOne<SensorEntidad>()  // Configura la relación
+                .WithMany(s => s.LecturaEntidades)  // Relación uno a muchos
+                .HasForeignKey(l => l.SensorId);  // Especifica la clave foránea
+
+            // AlertaEntidad
+            modelBuilder.Entity<AlertaEntidad>().HasKey(x => x.AlertaId);
+            modelBuilder.Entity<AlertaEntidad>().Property(x => x.Type)
+                .IsRequired()
+                .HasMaxLength(100);
+            modelBuilder.Entity<AlertaEntidad>().Property(x => x.Description)
+                .IsRequired()
+                .HasMaxLength(500);
+            modelBuilder.Entity<AlertaEntidad>().Property(x => x.RegisterDate)
+                .IsRequired();
+            modelBuilder.Entity<AlertaEntidad>().Property(x => x.Level)
+                .IsRequired()
+                .HasMaxLength(50);
+
+            // Configuración de las tablas de Identity
             modelBuilder.Entity<IdentityUser>().ToTable("Usuarios");
             modelBuilder.Entity<IdentityRole>().ToTable("Roles");
             modelBuilder.Entity<IdentityRoleClaim<string>>().ToTable("RolesClaims");
@@ -33,21 +67,11 @@ namespace SistemaAlertasBackEnd
             modelBuilder.Entity<IdentityUserLogin<string>>().ToTable("UsuariosLogins");
             modelBuilder.Entity<IdentityUserRole<string>>().ToTable("UsuariosRoles");
             modelBuilder.Entity<IdentityUserToken<string>>().ToTable("UsuariosTokens");
-
         }
 
 
-
-
-        //public DbSet<Genero> Generos { get; set; }
-        //public DbSet<Actor> Actores { get; set; }
-        //public DbSet<Pelicula> Peliculas { get; set; }
-        //public DbSet<Comentario> Comentarios { get; set; }
-        //public DbSet<GeneroPelicula> GeneroPeliculas { get; set; }
-        //public DbSet<ActorPelicula> ActorPeliculas { get; set; }
-        //public DbSet<Error> Errores { get; set; }
-        public DbSet<Token> Tokens { get; set; }
-
+        public DbSet<SensorEntidad> SensorEntitys { get; set; }
+        public DbSet<LecturaEntidad> LecturaEntitys { get; set; }
+        public DbSet<AlertaEntidad> AlertaEntitys { get; set; }
     }
-
 }

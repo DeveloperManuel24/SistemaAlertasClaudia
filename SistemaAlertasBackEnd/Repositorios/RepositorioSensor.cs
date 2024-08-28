@@ -23,8 +23,6 @@ namespace SistemaAlertasBackEnd.Repositorios
             await context.SaveChangesAsync();
             return sensor.SensorId;
         }
-
-        // Método para obtener un sensor y sus lecturas por el ID del sensor
         public async Task<SensorEntidad?> ObtenerPorId(int sensorId)
         {
             return await context.SensorEntitys

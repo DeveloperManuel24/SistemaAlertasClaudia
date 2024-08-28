@@ -53,9 +53,9 @@ namespace SistemaAlertasBackEnd.EndPoints
 
         // Obtener por ID ---------------------------------------------------------------------------------------
         static async Task<Results<Ok<GetAllSensoresDTO>, NotFound>> ObtenerPorId(
-    int id,
-    IRepositorioSensor repositorioSensor,
-    IMapper mapper)
+                                                         int id,
+                                                         IRepositorioSensor repositorioSensor,
+                                                         IMapper mapper)
         {
             var sensor = await repositorioSensor.ObtenerPorId(id);
 

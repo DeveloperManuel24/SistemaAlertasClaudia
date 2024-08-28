@@ -33,11 +33,17 @@ namespace SistemaAlertasBackEnd
                 .IsRequired()
                 .HasMaxLength(100);
             modelBuilder.Entity<LecturaEntidad>().Property(x => x.ph_parameter)
-                .HasPrecision(5, 2); // Ejemplo: Decimales con precisión de 5 dígitos, 2 después del punto decimal
+                .HasPrecision(5, 2);
             modelBuilder.Entity<LecturaEntidad>().Property(x => x.orp_parameter)
                 .HasPrecision(5, 2);
             modelBuilder.Entity<LecturaEntidad>().Property(x => x.turbidez_parameter)
                 .HasPrecision(5, 2);
+
+            // Configuración explícita de la relación uno a muchos
+            modelBuilder.Entity<LecturaEntidad>()
+                .HasOne<SensorEntidad>()  // Configura la relación
+                .WithMany(s => s.LecturaEntidades)  // Relación uno a muchos
+                .HasForeignKey(l => l.SensorId);  // Especifica la clave foránea
 
             // AlertaEntidad
             modelBuilder.Entity<AlertaEntidad>().HasKey(x => x.AlertaId);
@@ -62,6 +68,7 @@ namespace SistemaAlertasBackEnd
             modelBuilder.Entity<IdentityUserRole<string>>().ToTable("UsuariosRoles");
             modelBuilder.Entity<IdentityUserToken<string>>().ToTable("UsuariosTokens");
         }
+
 
         public DbSet<SensorEntidad> SensorEntitys { get; set; }
         public DbSet<LecturaEntidad> LecturaEntitys { get; set; }

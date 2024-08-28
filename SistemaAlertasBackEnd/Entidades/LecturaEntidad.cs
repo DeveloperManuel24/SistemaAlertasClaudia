@@ -11,6 +11,4 @@ public class LecturaEntidad
 
     public int SensorId { get; set; }
 
-    // Propiedad de navegación para la relación inversa
-    public SensorEntidad SensorEntidad { get; set; }
 }

@@ -88,11 +88,32 @@ namespace SistemaAlertasBackEnd.EndPoints
                                     (ultimaLectura.ph_parameter < (decimal)MinPH ? "bajo." : "alto.");
                 nivelAlerta = "Alerta";
             }
-            else if ((ultimaLectura.ph_parameter < (decimal)MinPH || ultimaLectura.ph_parameter > (decimal)MaxPH) &&
-                     (ultimaLectura.orp_parameter < (decimal)MinORP || ultimaLectura.orp_parameter > (decimal)MaxORP) &&
+
+
+
+            // Los que estan abajo o arriba del nivel seguro 
+            else if ((ultimaLectura.ph_parameter < (decimal)MinPH) &&
+                     (ultimaLectura.orp_parameter < (decimal)MinORP) &&
+                     ultimaLectura.turbidez_parameter < (decimal)MinTurbidez)
+            {
+                descripcionAlerta = "Alerta: Los niveles de pH, ORP y Turbidez están abajo de los rangos seguros.";
+                nivelAlerta = "Alerta";
+            }
+            // ph y orp bajos turbidez normal
+            else if ((ultimaLectura.ph_parameter < (decimal)MinPH) &&
+                    (ultimaLectura.orp_parameter < (decimal)MinORP) &&
+                    ultimaLectura.turbidez_parameter >= (decimal)MinTurbidez)
+            {
+                descripcionAlerta = "Alerta: Los niveles de pH, ORP  están abajo de los rangos seguros.";
+                nivelAlerta = "Alerta";
+            }
+
+
+            else if (( ultimaLectura.ph_parameter > (decimal)MaxPH) &&
+                     (ultimaLectura.orp_parameter > (decimal)MaxORP) &&
                      ultimaLectura.turbidez_parameter > (decimal)MaxTurbidez)
             {
-                descripcionAlerta = "Alerta: Los niveles de pH, ORP y Turbidez están fuera de los rangos seguros.";
+                descripcionAlerta = "Alerta: Los niveles de pH, ORP y Turbidez están arriba de los rangos seguros.";
                 nivelAlerta = "Alerta";
             }
 

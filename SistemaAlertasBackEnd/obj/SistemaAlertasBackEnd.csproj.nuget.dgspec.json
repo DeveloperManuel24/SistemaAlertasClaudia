@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\mordo\\source\\repos\\SistemaAlertasBackEnd\\SistemaAlertasBackEnd\\SistemaAlertasBackEnd.csproj": {}
+    "C:\\Users\\claud\\Desktop\\Proyecto de Graduación II\\Sistema\\SistemaAlertasClaudia\\SistemaAlertasBackEnd\\SistemaAlertasBackEnd.csproj": {}
   },
   "projects": {
-    "C:\\Users\\mordo\\source\\repos\\SistemaAlertasBackEnd\\SistemaAlertasBackEnd\\SistemaAlertasBackEnd.csproj": {
+    "C:\\Users\\claud\\Desktop\\Proyecto de Graduación II\\Sistema\\SistemaAlertasClaudia\\SistemaAlertasBackEnd\\SistemaAlertasBackEnd.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\mordo\\source\\repos\\SistemaAlertasBackEnd\\SistemaAlertasBackEnd\\SistemaAlertasBackEnd.csproj",
+        "projectUniqueName": "C:\\Users\\claud\\Desktop\\Proyecto de Graduación II\\Sistema\\SistemaAlertasClaudia\\SistemaAlertasBackEnd\\SistemaAlertasBackEnd.csproj",
         "projectName": "SistemaAlertasBackEnd",
-        "projectPath": "C:\\Users\\mordo\\source\\repos\\SistemaAlertasBackEnd\\SistemaAlertasBackEnd\\SistemaAlertasBackEnd.csproj",
-        "packagesPath": "C:\\Users\\mordo\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\mordo\\source\\repos\\SistemaAlertasBackEnd\\SistemaAlertasBackEnd\\obj\\",
+        "projectPath": "C:\\Users\\claud\\Desktop\\Proyecto de Graduación II\\Sistema\\SistemaAlertasClaudia\\SistemaAlertasBackEnd\\SistemaAlertasBackEnd.csproj",
+        "packagesPath": "C:\\Users\\claud\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\claud\\Desktop\\Proyecto de Graduación II\\Sistema\\SistemaAlertasClaudia\\SistemaAlertasBackEnd\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\mordo\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\claud\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [

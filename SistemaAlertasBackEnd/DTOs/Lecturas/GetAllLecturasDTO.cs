@@ -3,6 +3,7 @@
     public class GetAllLecturasDTO
     {
         public int ReadId { get; set; }
+        public int SensorId { get; set; }
         public DateTime RegisterDate { get; set; }
         public string Unity { get; set; }
         public decimal? ph_parameter { get; set; }

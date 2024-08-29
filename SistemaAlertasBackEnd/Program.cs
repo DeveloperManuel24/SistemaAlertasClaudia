@@ -69,12 +69,13 @@ builder.Services.AddOutputCache();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Inyección de dependencias para servicios personalizados
+// Inyección de dependencias para servicios personalizados--------------------------------------------------------------------
 builder.Services.AddTransient<IServicioUsuarios, ServicioUsuarios>();
 builder.Services.AddTransient<ServicioEmail>();
 
 builder.Services.AddScoped<IRepositorioSensor, RepositorioSensor>();
 builder.Services.AddScoped<IRepositorioLectura, RepositorioLectura>();
+builder.Services.AddScoped<IRepositorioAlerta, RepositorioAlerta>();
 
 
 // Otros servicios
@@ -106,5 +107,6 @@ app.UseAuthorization(); // Autorización después de autenticación
 app.MapGroup("/usuarios").MapUsuarios();
 app.MapGroup("/lecturas").MapLecturas();
 app.MapGroup("/api").MapSensores();
+app.MapGroup("/alertas").MapAlertas();
 
 app.Run();

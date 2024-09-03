@@ -18,6 +18,9 @@ namespace SistemaAlertasBackEnd
 
             // SensorEntidad
             modelBuilder.Entity<SensorEntidad>().HasKey(x => x.SensorId);
+            modelBuilder.Entity<SensorEntidad>().Property(x => x.NombreSensor)
+                .IsRequired()
+                .HasMaxLength(250);
             modelBuilder.Entity<SensorEntidad>().Property(x => x.Location)
                 .IsRequired()
                 .HasMaxLength(250);

@@ -11,11 +11,16 @@ namespace SistemaAlertasBackEnd.EndPoints
     {
         public static RouteGroupBuilder MapSensores(this RouteGroupBuilder group)
         {
-            group.MapPost("/sensores", CrearSensor);
-            group.MapGet("/sensores", ObtenerTodos);
-            group.MapGet("/sensores/{id:int}", ObtenerPorId);
-            group.MapPut("/sensores/{id:int}", ActualizarSensor);
-            group.MapDelete("/sensores/{id:int}", BorrarSensor);
+            group.MapPost("/sensores", CrearSensor)
+             .RequireAuthorization("esadmin");
+            group.MapGet("/sensores", ObtenerTodos)
+                .RequireAuthorization("esadmin");
+            group.MapGet("/sensores/{id:int}", ObtenerPorId)
+                .RequireAuthorization("esadmin");
+            group.MapPut("/sensores/{id:int}", ActualizarSensor)
+                .RequireAuthorization("esadmin");
+            group.MapDelete("/sensores/{id:int}", BorrarSensor)
+                .RequireAuthorization("esadmin");
 
             return group;
         }

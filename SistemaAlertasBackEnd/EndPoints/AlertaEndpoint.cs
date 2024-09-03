@@ -10,9 +10,11 @@ namespace SistemaAlertasBackEnd.EndPoints
     {
         public static RouteGroupBuilder MapAlertas(this RouteGroupBuilder group)
         {
-            group.MapGet("/alertas", ObtenerTodos);
-            group.MapGet("/alertas/{id:int}", ObtenerPorId);
-          
+            group.MapGet("/alertas", ObtenerTodos)
+            .RequireAuthorization();
+            group.MapGet("/alertas/{id:int}", ObtenerPorId)
+            .RequireAuthorization();
+
 
             return group;
         }

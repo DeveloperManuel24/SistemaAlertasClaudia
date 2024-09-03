@@ -20,7 +20,7 @@ namespace SistemaAlertasBackEnd.EndPoints
         }
 
        
-        // Obtener todos ---------------------------------------------------------------------------------------
+        // Obtener todos ----------------------------xd-----------------------------------------------------------
         static async Task<Ok<List<GetAllAlertasDTO>>> ObtenerTodos(
              IRepositorioAlerta repositorioAlerta,
             IMapper mapper)

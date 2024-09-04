@@ -11,8 +11,7 @@ namespace SistemaAlertasBackEnd.EndPoints
     {
         public static RouteGroupBuilder MapLecturas(this RouteGroupBuilder group)
         {
-            group.MapPost("/lecturas", CrearLectura)
-            .RequireAuthorization();
+            group.MapPost("/lecturas", CrearLectura);
             group.MapGet("/lecturas", ObtenerTodos)
             .RequireAuthorization();
             group.MapGet("/lecturas/{id:int}", ObtenerPorId)

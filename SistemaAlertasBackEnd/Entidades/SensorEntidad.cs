@@ -4,7 +4,7 @@
     {
 
         public int SensorId { get; set; }
-        public string NombreSensor { get; set; }
+        public String NombreSensor { get; set; }
         public String Location { get; set; }
         public String Status { get; set; }
 

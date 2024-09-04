@@ -14,13 +14,14 @@ namespace SistemaAlertasBackEnd.EndPoints
             group.MapPost("/sensores", CrearSensor)
              .RequireAuthorization("esadmin");
             group.MapGet("/sensores", ObtenerTodos)
-                .RequireAuthorization("esadmin");
+                .RequireAuthorization();
             group.MapGet("/sensores/{id:int}", ObtenerPorId)
-                .RequireAuthorization("esadmin");
+                .RequireAuthorization();
             group.MapPut("/sensores/{id:int}", ActualizarSensor)
                 .RequireAuthorization("esadmin");
-            group.MapDelete("/sensores/{id:int}", BorrarSensor)
+            group.MapDelete("/sensores/{id}", BorrarSensor)
                 .RequireAuthorization("esadmin");
+
 
             return group;
         }

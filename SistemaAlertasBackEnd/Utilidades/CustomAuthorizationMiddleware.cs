@@ -1,4 +1,6 @@
-﻿public class CustomAuthorizationMiddleware
+﻿using Microsoft.AspNetCore.Authorization;
+
+public class CustomAuthorizationMiddleware
 {
     private readonly RequestDelegate _next;
 
@@ -18,6 +20,7 @@
             if (authorizeAttribute != null)
             {
                 var user = context.User;
+
                 if (!user.Identity.IsAuthenticated)
                 {
                     context.Response.StatusCode = StatusCodes.Status401Unauthorized;
@@ -25,8 +28,10 @@
                     return;
                 }
 
-                // Verificar si el usuario tiene el claim "esadmin" solo si es necesario
-                if (!user.HasClaim(c => c.Type == "esadmin"))
+                // Verificar si el endpoint requiere el claim "esadmin"
+                var requireAdmin = endpoint.Metadata.GetMetadata<IAuthorizeData>()?.Policy == "esadmin";
+
+                if (requireAdmin && !user.HasClaim(c => c.Type == "esadmin"))
                 {
                     context.Response.StatusCode = StatusCodes.Status403Forbidden;
                     await context.Response.WriteAsync("No eres administrador");
@@ -36,14 +41,5 @@
         }
 
         await _next(context);
-    }
-}
-
-// Extensión para agregar el middleware en la tubería
-public static class CustomAuthorizationMiddlewareExtensions
-{
-    public static IApplicationBuilder UseCustomAuthorization(this IApplicationBuilder builder)
-    {
-        return builder.UseMiddleware<CustomAuthorizationMiddleware>();
     }
 }

@@ -3,6 +3,8 @@
 public class GetAllSensoresDTO
 {
     public int SensorId { get; set; }
+    public String NombreSensor { get; set; }
+
     public string Location { get; set; }
     public string Status { get; set; }
 

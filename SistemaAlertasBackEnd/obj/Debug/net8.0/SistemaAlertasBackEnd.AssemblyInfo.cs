@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SistemaAlertasBackEnd")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2bc20ed12780deeb868ba51d9c4929b21e7f3bd8")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+32852839d66bfa0c0c9c5ce0ed8e262710c8119a")]
 [assembly: System.Reflection.AssemblyProductAttribute("SistemaAlertasBackEnd")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SistemaAlertasBackEnd")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

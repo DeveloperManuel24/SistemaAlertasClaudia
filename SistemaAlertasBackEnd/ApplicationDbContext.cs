@@ -32,6 +32,9 @@ namespace SistemaAlertasBackEnd
             modelBuilder.Entity<LecturaEntidad>().HasKey(x => x.ReadId);
             modelBuilder.Entity<LecturaEntidad>().Property(x => x.RegisterDate)
                 .IsRequired();
+            modelBuilder.Entity<LecturaEntidad>().Property(x => x.SensorId)
+              .IsRequired()
+              .HasMaxLength(100);
             modelBuilder.Entity<LecturaEntidad>().Property(x => x.Unity)
                 .IsRequired()
                 .HasMaxLength(100);

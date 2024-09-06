@@ -44,14 +44,14 @@ builder.Services.AddCors(opciones =>
 // Configuración de Autenticación y JWT
 builder.Services.AddAuthentication().AddJwtBearer(opciones =>
 {
-    opciones.MapInboundClaims = false; // Necesario si quieres obtener el email del HttpContext
+    opciones.MapInboundClaims = false;
     opciones.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuer = false,
         ValidateAudience = false,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
-        IssuerSigningKey = Llaves.ObtenerLlave(builder.Configuration).First(), // Para una sola llave generada por nosotros mismos (lo mejor)
+        IssuerSigningKey = Llaves.ObtenerLlave(builder.Configuration).First(),
         ClockSkew = TimeSpan.Zero
     };
 });
@@ -69,7 +69,7 @@ builder.Services.AddOutputCache();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Inyección de dependencias para servicios personalizados--------------------------------------------------------------------
+// Inyección de dependencias para servicios personalizados
 builder.Services.AddTransient<IServicioUsuarios, ServicioUsuarios>();
 builder.Services.AddTransient<ServicioEmail>();
 
@@ -77,11 +77,10 @@ builder.Services.AddScoped<IRepositorioSensor, RepositorioSensor>();
 builder.Services.AddScoped<IRepositorioLectura, RepositorioLectura>();
 builder.Services.AddScoped<IRepositorioAlerta, RepositorioAlerta>();
 
-
 // Otros servicios
-builder.Services.AddHttpContextAccessor();
-builder.Services.AddAutoMapper(typeof(Program)); // Configuración AutoMapper
-builder.Services.AddProblemDetails(); // Para el manejo de errores en caso de que una pantalla no se encuentre
+builder.Services.AddHttpContextAccessor();  // Necesario para obtener el usuario autenticado
+builder.Services.AddAutoMapper(typeof(Program));
+builder.Services.AddProblemDetails();
 
 // Registro de los validadores de FluentValidation
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
@@ -96,12 +95,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
-app.UseCors(); // Configuración de CORS
-
-app.UseAuthentication(); // Autenticación antes de autorización
-app.UseMiddleware<CustomAuthorizationMiddleware>();
-app.UseAuthorization(); // Autorización después de autenticación
+app.UseCors();
+app.UseAuthentication();
+app.UseAuthorization();
 
 // Configuración de los EndPoints
 app.MapGroup("/usuarios").MapUsuarios();

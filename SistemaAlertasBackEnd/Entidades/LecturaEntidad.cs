@@ -9,6 +9,7 @@ public class LecturaEntidad
     public decimal? orp_parameter { get; set; }
     public decimal? turbidez_parameter { get; set; }
 
+
     public int SensorId { get; set; }
 
 }

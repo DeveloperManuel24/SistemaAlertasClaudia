@@ -49,7 +49,7 @@ namespace SistemaAlertasBackEnd.Servicios
             await EnviarEmail(mensaje, fromEmail, password, host, puerto);
         }
 
-        public async Task SendEmailUpdatedNotificationAsync(string email,string password, string userName)
+        public async Task SendEmailUpdatedNotificationAsync(string email, string password, string userName)
         {
             var subject = "Guatemaltecos por la nutrición - Actualización de Correo Electrónico";
             var htmlMessage = $@"
@@ -100,5 +100,25 @@ namespace SistemaAlertasBackEnd.Servicios
                 }
             }
         }
+
+        public async Task SendAlertaEmailAsync(string email, string userName, string tipoAlerta, string descripcion, string nivel, DateTime fecha)
+        {
+            var subject = "Nueva Alerta Generada - Sistema de Monitoreo de Sensores";
+            var htmlMessage = $@"
+                <p>Hola {userName},</p>
+                <p>Se ha generado una nueva alerta en el sistema de monitoreo de sensores.</p>
+                <p><strong>Tipo de Alerta:</strong> {tipoAlerta}</p>
+                <p><strong>Descripción:</strong> {descripcion}</p>
+                <p><strong>Nivel:</strong> {nivel}</p>
+                <p><strong>Fecha:</strong> {fecha.ToString("dd/MM/yyyy HH:mm:ss")}</p>
+                <p>Por favor, revisa el sistema para obtener más detalles.</p>
+                <p>Saludos,</p>
+                <p>El equipo de Monitoreo</p>";
+
+            await SendEmailAsync(email, subject, htmlMessage);
+        }
+
+      
     }
+
 }

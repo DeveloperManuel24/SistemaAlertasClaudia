@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http.HttpResults;
 using SistemaAlertasBackEnd.DTOs.Lecturas;
-using SistemaAlertasBackEnd.DTOs.Sensores;
 using SistemaAlertasBackEnd.Entidades;
 using SistemaAlertasBackEnd.Repositorios;
+using SistemaAlertasBackEnd.Servicios;
 
 namespace SistemaAlertasBackEnd.EndPoints
 {
@@ -12,10 +12,8 @@ namespace SistemaAlertasBackEnd.EndPoints
         public static RouteGroupBuilder MapLecturas(this RouteGroupBuilder group)
         {
             group.MapPost("/lecturas", CrearLectura);
-            group.MapGet("/lecturas", ObtenerTodos)
-            .RequireAuthorization();
-            group.MapGet("/lecturas/{id:int}", ObtenerPorId)
-                .RequireAuthorization();
+            group.MapGet("/lecturas", ObtenerTodos).RequireAuthorization();
+            group.MapGet("/lecturas/{id:int}", ObtenerPorId).RequireAuthorization();
 
             return group;
         }
@@ -25,7 +23,9 @@ namespace SistemaAlertasBackEnd.EndPoints
             CrearLecturaDTO crearLecturaDTO,
             IRepositorioLectura repositorioLectura,
             IRepositorioAlerta repositorioAlerta,
-            IMapper mapper)
+            IMapper mapper,
+            IHttpContextAccessor httpContextAccessor,
+            ServicioEmail servicioEmail)
         {
             // Mapeo del DTO a la entidad
             var lectura = mapper.Map<LecturaEntidad>(crearLecturaDTO);
@@ -34,7 +34,7 @@ namespace SistemaAlertasBackEnd.EndPoints
             var id = await repositorioLectura.Crear(lectura);
 
             // Después de crear la lectura, verificamos si se necesita crear una alerta
-            await VerificarYCrearAlerta(lectura, repositorioAlerta, mapper);
+            await VerificarYCrearAlerta(lectura, repositorioAlerta, mapper, httpContextAccessor, servicioEmail);
 
             // Mapear la entidad creada a un DTO para devolver al cliente
             var lecturaDTO = mapper.Map<GetAllLecturasDTO>(lectura);
@@ -47,7 +47,9 @@ namespace SistemaAlertasBackEnd.EndPoints
         private static async Task VerificarYCrearAlerta(
             LecturaEntidad ultimaLectura,
             IRepositorioAlerta repositorioAlerta,
-            IMapper mapper)
+            IMapper mapper,
+            IHttpContextAccessor httpContextAccessor,
+            ServicioEmail servicioEmail)
         {
             // Definir los umbrales para los parámetros
             const double MinPH = 6.5;
@@ -66,21 +68,21 @@ namespace SistemaAlertasBackEnd.EndPoints
                 ultimaLectura.orp_parameter >= (decimal)MinORP && ultimaLectura.orp_parameter <= (decimal)MaxORP &&
                 ultimaLectura.turbidez_parameter > (decimal)MaxTurbidez)
             {
-                descripcionAlerta = "Advertencia: El nivel de turbidez es elevado.";
+                descripcionAlerta = "El nivel de turbidez es elevado.";
             }
             else if (ultimaLectura.ph_parameter >= (decimal)MinPH && ultimaLectura.ph_parameter <= (decimal)MaxPH &&
                      ultimaLectura.orp_parameter >= (decimal)MinORP && ultimaLectura.orp_parameter <= (decimal)MaxORP &&
                      ultimaLectura.turbidez_parameter < (decimal)MinTurbidez)
             {
-                descripcionAlerta = "Advertencia: El nivel de turbidez es bajo.";
+                descripcionAlerta = "El nivel de turbidez es bajo.";
             }
             else if (ultimaLectura.ph_parameter >= (decimal)MinPH && ultimaLectura.ph_parameter <= (decimal)MaxPH &&
                      ultimaLectura.turbidez_parameter <= (decimal)MaxTurbidez && ultimaLectura.turbidez_parameter >= (decimal)MinTurbidez &&
                      (ultimaLectura.orp_parameter < (decimal)MinORP || ultimaLectura.orp_parameter > (decimal)MaxORP))
             {
-                descripcionAlerta = "Alerta: El nivel de ORP es " +
+                descripcionAlerta = " El nivel de ORP es " +
                                     (ultimaLectura.orp_parameter < (decimal)MinORP ? "bajo." : "elevado.");
-                nivelAlerta = "Alerta";
+                nivelAlerta = "Crítico";
             }
             else if (ultimaLectura.orp_parameter >= (decimal)MinORP && ultimaLectura.orp_parameter <= (decimal)MaxORP &&
                      ultimaLectura.turbidez_parameter <= (decimal)MaxTurbidez && ultimaLectura.turbidez_parameter >= (decimal)MinTurbidez &&
@@ -88,7 +90,7 @@ namespace SistemaAlertasBackEnd.EndPoints
             {
                 descripcionAlerta = "Alerta: El nivel de pH es " +
                                     (ultimaLectura.ph_parameter < (decimal)MinPH ? "bajo." : "alto.");
-                nivelAlerta = "Alerta";
+                nivelAlerta = "Crítico";
             }
 
 
@@ -111,7 +113,7 @@ namespace SistemaAlertasBackEnd.EndPoints
             }
 
 
-            else if (( ultimaLectura.ph_parameter > (decimal)MaxPH) &&
+            else if ((ultimaLectura.ph_parameter > (decimal)MaxPH) &&
                      (ultimaLectura.orp_parameter > (decimal)MaxORP) &&
                      ultimaLectura.turbidez_parameter > (decimal)MaxTurbidez)
             {
@@ -132,6 +134,16 @@ namespace SistemaAlertasBackEnd.EndPoints
                 };
 
                 await repositorioAlerta.Crear(nuevaAlerta);
+
+                // Obtener el correo electrónico del usuario autenticado
+                var userEmail = httpContextAccessor.HttpContext.User.FindFirst("email")?.Value;
+                var userName = httpContextAccessor.HttpContext.User.Identity.Name;
+
+                if (!string.IsNullOrEmpty(userEmail))
+                {
+                    // Enviar el correo electrónico con la alerta
+                    await servicioEmail.SendAlertaEmailAsync(userEmail, userName, nuevaAlerta.Type, nuevaAlerta.Description, nuevaAlerta.Level, nuevaAlerta.RegisterDate);
+                }
             }
         }
 
@@ -148,7 +160,7 @@ namespace SistemaAlertasBackEnd.EndPoints
         // Obtener por ID ---------------------------------------------------------------------------------------
         static async Task<Results<Ok<GetAllLecturasDTO>, NotFound>> ObtenerPorId(
             int id,
-             IRepositorioLectura repositorioLectura,
+            IRepositorioLectura repositorioLectura,
             IMapper mapper)
         {
             var lectura = await repositorioLectura.ObtenerPorIdSensor(id);
@@ -161,6 +173,5 @@ namespace SistemaAlertasBackEnd.EndPoints
             var lecturaDTO = mapper.Map<GetAllLecturasDTO>(lectura);
             return TypedResults.Ok(lecturaDTO);
         }
-
     }
 }

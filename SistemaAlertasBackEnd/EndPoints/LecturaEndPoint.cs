@@ -81,7 +81,7 @@ namespace SistemaAlertasBackEnd.EndPoints
                      (ultimaLectura.orp_parameter < (decimal)MinORP || ultimaLectura.orp_parameter > (decimal)MaxORP))
             {
                 descripcionAlerta = " El nivel de ORP es " +
-                                    (ultimaLectura.orp_parameter < (decimal)MinORP ? "bajo." : "elevado.");
+                                    (ultimaLectura.orp_parameter < (decimal)MinORP ? "bajo,Alerta por baja desinfección." : "elevado,Alerta por alta desinfección .");
                 nivelAlerta = "Crítico";
             }
             else if (ultimaLectura.orp_parameter >= (decimal)MinORP && ultimaLectura.orp_parameter <= (decimal)MaxORP &&
@@ -89,7 +89,7 @@ namespace SistemaAlertasBackEnd.EndPoints
                      (ultimaLectura.ph_parameter < (decimal)MinPH || ultimaLectura.ph_parameter > (decimal)MaxPH))
             {
                 descripcionAlerta = "Alerta: El nivel de pH es " +
-                                    (ultimaLectura.ph_parameter < (decimal)MinPH ? "bajo." : "alto.");
+                                    (ultimaLectura.ph_parameter < (decimal)MinPH ? "bajo, Alerta por acidez." : "alto, Alerta por alcalinidad.");
                 nivelAlerta = "Crítico";
             }
 

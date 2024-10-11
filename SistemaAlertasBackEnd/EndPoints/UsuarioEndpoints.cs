@@ -265,15 +265,15 @@ namespace SistemaAlertasBackEnd.EndPoints
         }
 
         private async static Task<RespuestaAutenticacionDTO> ConstruirToken(
-            UsuarioCrearDTO usuarioCrearDTO,
-            IConfiguration configuration,
-            UserManager<IdentityUser> userManager)
+     UsuarioCrearDTO usuarioCrearDTO,
+     IConfiguration configuration,
+     UserManager<IdentityUser> userManager)
         {
             var claims = new List<Claim>
-            {
-                new Claim("email", usuarioCrearDTO.CorreoElectronico),
-                new Claim("lo que yo quiera", "cualquier otro valor")
-            };
+    {
+        new Claim("email", usuarioCrearDTO.CorreoElectronico),
+        new Claim("lo que yo quiera", "cualquier otro valor")
+    };
 
             var usuario = await userManager.FindByNameAsync(usuarioCrearDTO.CorreoElectronico);
             var claimsDB = await userManager.GetClaimsAsync(usuario!);
@@ -290,9 +290,10 @@ namespace SistemaAlertasBackEnd.EndPoints
 
             var expiracion = DateTime.UtcNow.AddYears(1);
 
+            // Aquí es donde debes agregar el 'issuer' y 'audience'
             var tokenDeSeguridad = new JwtSecurityToken(
-                issuer: null,
-                audience: null,
+                issuer: configuration["Jwt:Issuer"],  // Usa el Issuer de tu appsettings.json
+                audience: configuration["Jwt:Audience"],  // Usa el Audience de tu appsettings.json
                 claims: claims,
                 expires: expiracion,
                 signingCredentials: creds);
@@ -305,5 +306,6 @@ namespace SistemaAlertasBackEnd.EndPoints
                 Expiracion = expiracion
             };
         }
+
     }
 }

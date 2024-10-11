@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "pAN8bNjoIqf4oYdNTYsWYgpFlhv9m9JD4USLE9QW9mk=",
+  "Source": "SistemaAlertasBackEnd",
+  "BasePath": "_content/SistemaAlertasBackEnd",
+  "Mode": "Default",
+  "ManifestType": "Publish",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

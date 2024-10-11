@@ -27,34 +27,57 @@ builder.Services.AddScoped<UserManager<IdentityUser>>();
 builder.Services.AddScoped<SignInManager<IdentityUser>>();
 
 // Configuración de CORS
-var origenesPermitidos = builder.Configuration.GetValue<string>("origenespermitidos")!;
-builder.Services.AddCors(opciones =>
+var origenesPermitidos = builder.Configuration.GetValue<string>("origenespermitidos");
+if (!string.IsNullOrEmpty(origenesPermitidos))
 {
-    opciones.AddDefaultPolicy(configuracion =>
+    // Configuración de CORS
+    builder.Services.AddCors(opciones =>
     {
-        configuracion.WithOrigins(origenesPermitidos).AllowAnyHeader().AllowAnyMethod();
+        opciones.AddDefaultPolicy(configuracion =>
+        {
+            configuracion.AllowAnyOrigin() // Permitir cualquier dominio
+                         .AllowAnyHeader()
+                         .AllowAnyMethod();
+        });
+
+        opciones.AddPolicy("libre", configuracion =>
+        {
+            configuracion.AllowAnyOrigin()
+                         .AllowAnyHeader()
+                         .AllowAnyMethod();
+        });
     });
 
-    opciones.AddPolicy("libre", configuracion =>
-    {
-        configuracion.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
-    });
-});
+}
+else
+{
+    Console.WriteLine("Advertencia: No se configuraron los orígenes permitidos.");
+}
 
 // Configuración de Autenticación y JWT
-builder.Services.AddAuthentication().AddJwtBearer(opciones =>
+var jwtKey = Llaves.ObtenerLlave(builder.Configuration).FirstOrDefault();
+if (jwtKey != null)
 {
-    opciones.MapInboundClaims = false;
-    opciones.TokenValidationParameters = new TokenValidationParameters
+    builder.Services.AddAuthentication().AddJwtBearer(opciones =>
     {
-        ValidateIssuer = false,
-        ValidateAudience = false,
-        ValidateLifetime = true,
-        ValidateIssuerSigningKey = true,
-        IssuerSigningKey = Llaves.ObtenerLlave(builder.Configuration).First(),
-        ClockSkew = TimeSpan.Zero
-    };
-});
+        opciones.MapInboundClaims = false;
+        opciones.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],  // Asegúrate de que esta clave esté configurada
+            ValidateAudience = true,
+            ValidAudience = builder.Configuration["Jwt:Audience"],  // Asegúrate de que esta clave esté configurada
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = jwtKey,
+            ClockSkew = TimeSpan.Zero
+        };
+    });
+}
+else
+{
+    throw new InvalidOperationException("Error: No se pudo encontrar la llave JWT para firmar los tokens.");
+}
 
 // Creación de Roles y Políticas de Autorización
 builder.Services.AddAuthorization(opciones =>

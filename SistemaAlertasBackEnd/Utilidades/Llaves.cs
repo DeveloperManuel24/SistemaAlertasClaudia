@@ -1,4 +1,4 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿/*using Microsoft.IdentityModel.Tokens;
 
 namespace SistemaAlertasBackEnd.Utilidades
 {
@@ -38,5 +38,35 @@ namespace SistemaAlertasBackEnd.Utilidades
             }
         }
 
+    }
+}*/
+
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+
+namespace SistemaAlertasBackEnd.Utilidades
+{
+    public static class Llaves
+    {
+        // Método para obtener la llave JWT desde appsettings.json
+        public static IEnumerable<SecurityKey> ObtenerLlave(IConfiguration configuration)
+        {
+            // Leer la clave desde la sección Jwt:Key
+            var llaveSecreta = configuration["Jwt:Key"];
+            if (string.IsNullOrEmpty(llaveSecreta))
+            {
+                throw new InvalidOperationException("No se encontró la clave JWT en la configuración.");
+            }
+
+            // Convertir la clave de Base64 a bytes y devolverla como SecurityKey
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(llaveSecreta));
+            return new List<SecurityKey> { key };
+        }
+
+        // Método para obtener todas las llaves (aunque solo tengas una en este caso)
+        public static IEnumerable<SecurityKey> ObtenerTodasLasLlaves(IConfiguration configuration)
+        {
+            return ObtenerLlave(configuration);
+        }
     }
 }
